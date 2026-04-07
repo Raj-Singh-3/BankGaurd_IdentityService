@@ -1,12 +1,24 @@
 package com.cts.TransactionService.controller;
 
-import com.cts.TransactionService.entity.Account;
-import com.cts.TransactionService.service.AccountService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cts.TransactionService.dto.MoneyTransferRequest;
+import com.cts.TransactionService.dto.MoneyTransferResponse;
+import com.cts.TransactionService.entity.Account;
+import com.cts.TransactionService.service.AccountService;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -53,5 +65,60 @@ public class AccountController {
             return new ResponseEntity<>("Account deleted successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
+    }
+    
+    /**
+     * Validate transfer before processing
+     * @param transferRequest Contains sender account, recipient account, and amount
+     * @return MoneyTransferResponse with validation result
+     */
+    @PostMapping("/transfer/validate")
+    public ResponseEntity<MoneyTransferResponse> validateTransfer(@RequestBody MoneyTransferRequest transferRequest) {
+        try {
+            MoneyTransferResponse response = accountService.validateTransfer(
+                transferRequest.getSenderAccountNumber(),
+                transferRequest.getRecipientAccountNumber(),
+                transferRequest.getAmount()
+            );
+            
+            if (response.isSuccess()) {
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            MoneyTransferResponse errorResponse = new MoneyTransferResponse();
+            errorResponse.setSuccess(false);
+            errorResponse.setMessage("Error validating transfer: " + e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    /**
+     * Transfer money from one account to another
+     * Validates: recipient account exists, recipient != sender, and sufficient balance
+     * @param transferRequest Contains sender account, recipient account, and amount
+     * @return MoneyTransferResponse with transfer status and new balances
+     */
+    @PostMapping("/transfer")
+    public ResponseEntity<MoneyTransferResponse> transferMoney(@RequestBody MoneyTransferRequest transferRequest) {
+        try {
+            MoneyTransferResponse response = accountService.transferMoney(
+                transferRequest.getSenderAccountNumber(),
+                transferRequest.getRecipientAccountNumber(),
+                transferRequest.getAmount()
+            );
+            
+            if (response.isSuccess()) {
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            MoneyTransferResponse errorResponse = new MoneyTransferResponse();
+            errorResponse.setSuccess(false);
+            errorResponse.setMessage("Error processing transfer: " + e.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

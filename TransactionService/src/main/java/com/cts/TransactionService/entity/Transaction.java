@@ -1,8 +1,7 @@
 package com.cts.TransactionService.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,33 +9,32 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "transaction")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RawTransaction {
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer transactionID;
+    private Integer transactionId;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "payload_id", nullable = false)
-    private Payload payload;
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerProfile customerProfile;
-    
+
     private Double amount;
-    private Boolean processingStatus;
+    private LocalDateTime transactionTimestamp;
+    private String status; // GENUINE, SUSPICIOUS, BLOCKED
+    private Integer riskScore;
+    private String description;
     
-    @OneToMany(mappedBy = "rawTransaction", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private java.util.List<Transaction> transactions;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "raw_transaction_id")
+    private RawTransaction rawTransaction;
 }

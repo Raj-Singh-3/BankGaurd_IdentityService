@@ -230,12 +230,6 @@ button.secondary:hover {
   }
 }
 
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
 #next-steps ul {
   list-style: none;
   padding: 0;
@@ -312,5 +306,131 @@ button.secondary:hover {
   &::after {
     right: 0;
     border-right-color: var(--border);
+  }
+}
+/* Choice Container */
+.choice-container {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.choice-container h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.choice-container p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 15px;
+}
+
+.choice-button {
+  display: block;
+  width: 100%;
+  margin: 10px 0 !important;
+  padding: 15px 20px !important;
+  font-size: 16px !important;
+}
+
+/* Customer Info */
+.customer-info {
+  margin-bottom: 25px;
+}
+
+.customer-details {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+  margin-top: 15px;
+}
+
+.customer-details p {
+  margin: 8px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.customer-details strong {
+  color: #667eea;
+  margin-right: 5px;
+}
+
+/* Transaction History */
+.transaction-history {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.transaction-history h3 {
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.history-table {
+  background: #f8f9fa;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.history-header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 12px;
+  background: #667eea;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 12px;
+  align-items: center;
+  text-align: center;
+  color: #666;
+}
+
+.history-row:last-child {
+  border-bottom: none;
+}
+
+.history-row span {
+  word-break: break-word;
+}
+
+.status-genuine {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.status-suspicious {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.status-blocked {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .history-table {
+    overflow-x: auto;
+  }
+
+  .history-header,
+  .history-row {
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 10px;
   }
 }

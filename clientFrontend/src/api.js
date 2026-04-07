@@ -4,7 +4,8 @@ export const API_ENDPOINTS = {
   ACCOUNTS: `${API_BASE_URL}/accounts`,
   CUSTOMERS: `${API_BASE_URL}/customers`,
   PAYLOADS: `${API_BASE_URL}/payloads`,
-  TRANSACTIONS: `${API_BASE_URL}/transactions`
+  TRANSACTIONS: `${API_BASE_URL}/transactions`,
+  EVALUATED_TRANSACTIONS: `${API_BASE_URL}/evaluated-transactions`
 }
 
 export const handleApiCall = async (url, method = 'GET', data = null) => {
